@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<services>	
+
+	<service id="0x1000">
+		<!-- Methods -->
+		<method id="0x0111" type="REQUEST" >
+			<client id="SomeIPClient0x3020" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+			<client id="SomeIPClient0x5000" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+			<client id="SomeIPClient0x1000" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+		</method>
+		<method id="0x0222" type="REQUEST_NO_RETURN" >
+			<client id="SomeIPClient0x5000" timesensitive="true" min="4.9" max="5.1" resendMin="2" resendMax="3" />
+		</method>
+		<method id="0x0fff" type="REQUEST_NO_RETURN" >
+			<client id="SomeIPClient0x3000" timesensitive="true" min="4.9" max="5.1" resendMin="2" resendMax="3" />
+		</method>
+		<!-- Devices -->
+		<servers>
+			<server id="SomeIPServer0x1000" errorRate="0.1" min="1" max="5"/>
+		</servers>	
+	</service>
+
+	<service id="0x3000">
+		<!-- Methods -->
+		<method id="0x0001" type="REQUEST" >
+			<client id="SomeIPClient0x3000" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+			<client id="SomeIPClient0x3010" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+			<client id="SomeIPClient0x3020" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+			<client id="SomeIPClient0x6000" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+			<client id="SomeIPClient0xC000" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+			<client id="SomeIPClient0xC010" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+		</method>
+		<method id="0x0002" type="NOTIFICATION" >
+			<client id="SomeIPClient0xC010" timesensitive="true" min="4.9" max="5.1" resendMin="2" resendMax="3" />
+			<client id="SomeIPClient0x5000" timesensitive="true" min="4.9" max="5.1" resendMin="2" resendMax="3" />
+		</method>
+		<!-- Devices -->
+		<servers>
+			<server id="SomeIPServer0x3000" errorRate="0.2" min="1" max="5" />
+		</servers>	
+	</service>
+
+	<service id="0x4000">
+		<!-- Methods -->
+		<method id="0x0001" type="REQUEST" >
+			<client id="SomeIPClient0x6000" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+		</method>
+		<method id="0x0002" type="NOTIFICATION" >
+			<client id="SomeIPClient0xC000" timesensitive="true" min="4.9" max="5.1" resendMin="2" resendMax="3" />
+		</method>
+		<!-- Devices -->
+		<servers>
+			<server id="SomeIPServer0x3000" errorRate="0.1" min="1" max="5" />
+			<server id="SomeIPServer0x3010" errorRate="0.1" min="1" max="5" />
+			<server id="SomeIPServer0x3020" errorRate="0.4" min="1" max="5" />
+			<server id="SomeIPServer0x6000" errorRate="0.6" min="1" max="5" />
+			<server id="SomeIPServer0xC000" errorRate="0.1" min="1" max="5" />
+			<server id="SomeIPServer0xC010" errorRate="0.3" min="1" max="5" />
+		</servers>	
+	</service>
+
+</services>
