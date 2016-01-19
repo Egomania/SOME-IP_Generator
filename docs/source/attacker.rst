@@ -1,7 +1,7 @@
 ``src.Attacker`` -- Attacker
 ===========================================
 
-.. automodule:: tornado.queues
+.. automodule:: src.Attacker
 
    Classes
    -------
