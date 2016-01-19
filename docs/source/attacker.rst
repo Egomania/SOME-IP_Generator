@@ -1,7 +1,7 @@
-``src.Attacker`` -- Attacker
+``Attacker.py`` -- Attacker
 ===========================================
 
-.. automodule:: src.Attacker
+.. automodule:: Attacker
 
    Classes
    -------
