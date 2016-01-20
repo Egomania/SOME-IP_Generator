@@ -73,3 +73,39 @@ The following information can be specified:
  * **sendPort** as Port from which messages are sent
  * **recPort** as Port from which messages are received
 
+Client have an additional attribute *clientID*.
+
+## services.xml
+
+The file to define service information is located at src/services.xml.
+A service entry look as follows:
+
+``` xml
+<service id="0x1000">
+	<!-- Methods -->
+	<method id="0x0111" type="REQUEST" >
+		<client id="SomeIPClient0x3020" timesensitive="false" min="1" max="10" resendMin="2" resendMax="3" />
+		<client id="SomeIPClient0xC010" timesensitive="true" min="4.9" max="5.1" resendMin="2" resendMax="3" />
+	</method>
+	<!-- Devices -->
+	<servers>
+		<server id="SomeIPServer0x1000" errorRate="0.1" min="1" max="5"/>
+	</servers>	
+</service>
+```
+
+First, the *id* of the service is defined.
+Note that this id corresponds to the id appaering in the SOME/IP Packet.
+
+Second, the methods associated with the service are specified.
+This contains the *method id* and the *message type*.
+The *message type* can be REQUEST, REQUEST_NO_RETURN or NOTIFICATION.
+The clients allowed to use those methods are listed afterwards.
+The *client* information compasses of
+ * **id** that has to be the same as in devices.xml
+ * **timesensitive** that defines whether or not messages are sent on a regular basis
+ * **min** defines the minimum interleave between packets of the same configuration
+ * **max** defines the maximum interleave between packets of the same configuration
+ * **min** defines the minimum interleave between resending a packet after an error
+ * **max** defines the maximum interleave between resending a packet after an error
+
