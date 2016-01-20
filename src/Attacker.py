@@ -1,3 +1,10 @@
+""" 
+The attacker module is used for simualtion predefined attacks. 
+Messages between clients and servers are passed through the attacker and modified for attacks.
+The attacker runs as a single process.
+
+"""
+
 import multiprocessing
 import random 
 import time     
@@ -10,6 +17,23 @@ import Configuration
 import SomeIPPacket
 
 class Attacker(object):
+
+    """
+    Initializes the Attacker.
+
+    :param config: Own config
+    :param clientConfigs: List of all available client configurations
+    :param clientQueues: List of all available Client queues to pass messages to the client
+    :param serverConfigs: List of all available server configurations
+    :param serverQueues: List of all available Client queues to pass messages to the client
+    :param writer: Writer queue to pass messages to that are send on the interface or written to the .pcap file
+    :param conter: Number of attacks to be executed, can be set to 0 to create dumps without attacks
+    :param attacks: List of attacks that can be executed during runtime, those values can be configured using the configuration file
+    :param attackerQueue: Own queue messages from all clients and servers are passed to
+    :param attackers: Other attackers whos messages can be ignored and are not attacked
+    :param verbose: can be set to True for additional output, default=False
+    :returns: configured Attacker Object
+    """
     def __init__(self, config, clientConfigs, clientQueues, serverConfigs, serverQueues, writer, counter, attacks, attackerQueue, attackers, verbose=False):
 
         self.config = config
@@ -28,17 +52,20 @@ class Attacker(object):
         self.attacks = attacks
         self.verbose = verbose
 
-
     def setIntervalMin(self, intervalMin):
+        """ Set the minimum Interval an attacker will respond. The interval is given as int im ms."""
         self.intervalMin = intervalMin
 
     def setIntervalMax(self, intervalMax):
+        """ Set the maximum Interval an attacker will respond.  The interval is given as int im ms."""
         self.intervalMax = intervalMax
 
     def setName(self, name):
+        """ Set the internal Name of the attacker, useful in case more attackers in verbose mode are used.  The name is given as string. """
         self.name = name
     
     def setOwnClientID(self, clientID):
+        """ Set the own client ID of the attacker as the attacker is a legitime part of the network. The client id is given as int. """
         self.clientID = clientID
 
 def getUsedMethod(methods, methodIdUsed):
@@ -56,6 +83,15 @@ def getUsedService(services, serviceIdUsed):
     return None
 
 def createMsg(serviceIdUsed, methodIdUsed, clientID, methodType):
+    """ 
+    Create a message as part of class Message.
+
+    :param serviceIdUsed: The service id that appears in the SOME/IP Packet.
+    :param methodIdUsed: The method id that appears in the SOME/IP Packet.
+    :param clientID: The client id that appears in the SOME/IP Packet as initiating participant.
+    :param methodType: The method type that appears in the SOME/IP Packet.
+    :returns: A dictionary of strings that can be used for the Message class.
+    """
     message = {}
         
     message['service'] = serviceIdUsed       
@@ -71,12 +107,14 @@ def createMsg(serviceIdUsed, methodIdUsed, clientID, methodType):
     return message
 
 def chooseRandomServer(service):
+    """ Choose a random server to pass the created message to. All configured server can appear here. """
     servers = service['server']
     serverNumUsed = random.randint(0,len(servers)-1)
     serverIdUsed = servers[serverNumUsed]
     return serverIdUsed        
 
 def selectVictim(victims):
+    """ Select a victim to attack and pepare all needed meta-data for the attack to be executed. """
     victim = {}
 
     victim['client'] = random.choice(list(victims.keys()))
@@ -107,13 +145,14 @@ def selectVictim(victims):
     return victim
 
 def fakeClientID(a):
-    
+    """ Attack that sends an arbitrary SOME/IP Packet using the own configuration (IP and MAC) but impersonates with another valid client id. """
     victim = selectVictim(a.clientConfigs)
     timestamp = None
     msg = Msg.Msg(a.name, victim['server'], victim['msg'], timestamp)
     return msg
 
 def wrongInterface(a):
+    """ Sends a valid message impersonating another device with the wrong interface Number 0x03. """
     victim = selectVictim(a.clientConfigs)
     victim['msg']['clientID'] = a.clientID
     victim['msg']['iface'] = 0x03
@@ -122,6 +161,7 @@ def wrongInterface(a):
     return msg
 
 def disturbTiming(a):
+    """ Selects a device that sends time sensitive messages from configuration and sends an additional arbitrary but correct SOME/IP Packet to disturb the timing of the victim."""
     toremove = []
     preselect = copy.deepcopy(a.clientConfigs)
     for client in preselect:
@@ -147,10 +187,12 @@ def disturbTiming(a):
     return msg
 
 def randomErrorCode():
+    """ Attack that replaces a correct Error Code with an arbitrary one that might is not correct for the situation. """
     errorCode = random.choice(list(SomeIPPacket.errorCodes.keys()))
     return SomeIPPacket.errorCodes[errorCode]
 
 def fakeResponse(a, msgOrig):
+    """ Removes a valid response from a server and replaces this response with an Error message. """
     sender = msgOrig.receiver
     receiver = msgOrig.sender
     timestamp = None
@@ -174,6 +216,7 @@ def fakeResponse(a, msgOrig):
     return msg
 
 def sendErrorOnError(a, msgOrig):
+    """ Answers with an Error message to a previous Error message. """
     sender = msgOrig.receiver
     receiver = msgOrig.sender
     timestamp = None
@@ -208,103 +251,115 @@ def setTimestamp(timestamp, intervalMin, intervalMax):
     return newTS
 
 def doAttack(curAttack, msgOrig, a, attacksSuc):
+    """ 
+    Execute one of the predefined attacks that are configured to be executed. 
+    
+    :param curAttack: Choosen current attack.
+    :param msgOrig: Original message the attack is applied to.
+    :param a: Attacker Object containing all needed configurations and information.
+    :param attacksSuc: Counter for successfully executed attacks.
+    :returns: Triple(Boolean, Boolean, Int), First entry means that the original message is forwarded or not, The second part means attack was successfull, the last value indicates the number of successfully executed attacks.
+    """
+    
+    if curAttack == 'fakeclientid':
+        if a.verbose:
+            print ('Fake Client ID Attack')
+        msg = fakeClientID(a)
+        if a.verbose:
+            print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
+        sendMsg(a, msg, msgOrig)
+        attacksSuc = attacksSuc + 1
+        return (False, False, attacksSuc)
 
-        if curAttack == 'fakeclientid':
-            if a.verbose:
-                print ('Fake Client ID Attack')
-            msg = fakeClientID(a)
+    elif curAttack == 'wronginterface':
+        if a.verbose:
+            print ('Wrong Interface Attack')
+        msg = wrongInterface(a)
+        if a.verbose:
+            print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
+        sendMsg(a, msg, msgOrig)
+        attacksSuc = attacksSuc + 1
+        return (False, False, attacksSuc)
+
+    elif curAttack == 'disturbtiming':
+        if a.verbose:
+            print ('Disturb Timing Attack')
+        msg = disturbTiming(a)
+        if a.verbose:
+            print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
+        sendMsg(a, msg, msgOrig)
+        attacksSuc = attacksSuc + 1
+        return (False, False, attacksSuc)
+
+    elif curAttack == 'fakeresponse':
+        if a.verbose:
+            print ('Fake Response Attack')
+
+        if msgOrig.message['type'] == SomeIPPacket.messageTypes['REQUEST']:
+            msg = fakeResponse(a, msgOrig)
             if a.verbose:
                 print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
             sendMsg(a, msg, msgOrig)
             attacksSuc = attacksSuc + 1
-            return (False, False, attacksSuc)
-
-        elif curAttack == 'wronginterface':
-            if a.verbose:
-                print ('Wrong Interface Attack')
-            msg = wrongInterface(a)
-            if a.verbose:
-                print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
-            sendMsg(a, msg, msgOrig)
-            attacksSuc = attacksSuc + 1
-            return (False, False, attacksSuc)
-
-        elif curAttack == 'disturbtiming':
-            if a.verbose:
-                print ('Disturb Timing Attack')
-            msg = disturbTiming(a)
-            if a.verbose:
-                print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
-            sendMsg(a, msg, msgOrig)
-            attacksSuc = attacksSuc + 1
-            return (False, False, attacksSuc)
-
-        elif curAttack == 'fakeresponse':
-            if a.verbose:
-                print ('Fake Response Attack')
-
-            if msgOrig.message['type'] == SomeIPPacket.messageTypes['REQUEST']:
-                msg = fakeResponse(a, msgOrig)
-                if a.verbose:
-                    print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
-                sendMsg(a, msg, msgOrig)
-                attacksSuc = attacksSuc + 1
-                return (False, True, attacksSuc)
-            else:
-                return (True, False, attacksSuc)
-
-        elif curAttack == 'senderroronerror':
-            if a.verbose:
-                print ('Send Error On Error Attack')
-            if msgOrig.message['type'] == SomeIPPacket.messageTypes['ERROR']:
-                msg = sendErrorOnError(a, msgOrig)
-                if a.verbose:
-                    print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
-                sendMsg(a, msg, msgOrig)
-                attacksSuc = attacksSuc + 1
-                return (False, False, attacksSuc)
-            else:
-                return (True, False, attacksSuc)
-
-
-        elif curAttack == 'senderroronevent':
-            if a.verbose:
-                print ('Send Error On Event Attack')
-            if (msgOrig.message['type'] == SomeIPPacket.messageTypes['NOTIFICATION']) or (msgOrig.message['type'] == SomeIPPacket.messageTypes['REQUEST_NO_RETURN']):
-                msg = sendErrorOnError(a, msgOrig)
-                if a.verbose:
-                    print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
-                sendMsg(a, msg, msgOrig)
-                attacksSuc = attacksSuc + 1
-                return (False, False, attacksSuc)
-            else:
-                return (True, False, attacksSuc)
-        elif curAttack == 'deleterequest':
-            if a.verbose:
-                print ('Delete Request Attack')
-            if (msgOrig.message['type'] == SomeIPPacket.messageTypes['REQUEST']):
-                if a.verbose:
-                    print ('Successfully Deleted Request')
-                forward (a, msgOrig)
-                attacksSuc = attacksSuc + 1
-                return (False, True, attacksSuc)
-            else:
-                return (True, False, attacksSuc)
-        elif curAttack == 'deleteresponse':
-            if a.verbose:
-                print ('Delete Response Attack')
-            if (msgOrig.message['type'] == SomeIPPacket.messageTypes['RESPONSE']):
-                if a.verbose:
-                    print ('Successfully Deleted Attack')
-                forward (a, msgOrig)
-                attacksSuc = attacksSuc + 1
-                return (False, True, attacksSuc)
-            else:
-                return (True, False, attacksSuc)
+            return (False, True, attacksSuc)
         else:
+            return (True, False, attacksSuc)
+
+    elif curAttack == 'senderroronerror':
+        if a.verbose:
+            print ('Send Error On Error Attack')
+        if msgOrig.message['type'] == SomeIPPacket.messageTypes['ERROR']:
+            msg = sendErrorOnError(a, msgOrig)
+            if a.verbose:
+                print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
+            sendMsg(a, msg, msgOrig)
+            attacksSuc = attacksSuc + 1
             return (False, False, attacksSuc)
+        else:
+            return (True, False, attacksSuc)
+
+
+    elif curAttack == 'senderroronevent':
+        if a.verbose:
+            print ('Send Error On Event Attack')
+        if (msgOrig.message['type'] == SomeIPPacket.messageTypes['NOTIFICATION']) or (msgOrig.message['type'] == SomeIPPacket.messageTypes['REQUEST_NO_RETURN']):
+            msg = sendErrorOnError(a, msgOrig)
+            if a.verbose:
+                print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
+            sendMsg(a, msg, msgOrig)
+            attacksSuc = attacksSuc + 1
+            return (False, False, attacksSuc)
+        else:
+            return (True, False, attacksSuc)
+
+    elif curAttack == 'deleterequest':
+        if a.verbose:
+            print ('Delete Request Attack')
+        if (msgOrig.message['type'] == SomeIPPacket.messageTypes['REQUEST']):
+            if a.verbose:
+                print ('Successfully Deleted Request')
+            forward (a, msgOrig)
+            attacksSuc = attacksSuc + 1
+            return (False, True, attacksSuc)
+        else:
+            return (True, False, attacksSuc)
+
+    elif curAttack == 'deleteresponse':
+        if a.verbose:
+            print ('Delete Response Attack')
+        if (msgOrig.message['type'] == SomeIPPacket.messageTypes['RESPONSE']):
+            if a.verbose:
+                print ('Successfully Deleted Attack')
+            forward (a, msgOrig)
+            attacksSuc = attacksSuc + 1
+            return (False, True, attacksSuc)
+        else:
+            return (True, False, attacksSuc)
+    else:
+        return (False, False, attacksSuc)
 
 def sendMsg(a, msg, msgOrig):
+    """ The Message Object is sent to the writer queue putting the Packet into the trace. """
     msg.timestamp = setTimestamp(msgOrig.timestamp, a.intervalMin, a.intervalMax)
     a.writerQueue.put(msg)
     if msg.receiver in a.serverQueues:
@@ -315,6 +370,7 @@ def sendMsg(a, msg, msgOrig):
         print ('Unkown Receiver.')
 
 def forward (a, msg):
+    """ The message is going to be forwarded to its original receiver. """
     if msg.receiver in a.clientQueues:
         a.clientQueues[msg.receiver].put(msg)
     elif msg.receiver in a.serverQueues:
@@ -325,6 +381,7 @@ def forward (a, msg):
         print ('Unkown Receiver.')
 
 def attacker (a):
+    """ Main method of the module that is initializing needed data and executing the attacking loop. """
     name = multiprocessing.current_process().name
     a.setName(name)
     a.setOwnClientID(a.config['clientID'])
