@@ -10,7 +10,7 @@ Note that the trace is out out-of-order, you can use e.g. reordercap to cope wit
 
 The main configuration file is located in src/config.ini.
 
-´´´ini
+``` ini
 [Files]
 deviceFile=config/devices.xml
 serviceFile=config/services.xml
@@ -37,7 +37,7 @@ deleteResponse=true
 client=false
 server=false
 attacker=false
-´´´
+```
 
 The *Files* section lists the additionally needed meta data file.
  * **deviceFile** contains information like name, type, mac, ip, sender port and receiving port
@@ -55,3 +55,21 @@ The *Attacks* section defines all needed information for the attacker configurat
  * The other options define whether or not a specififc attack is included
 
 The *Verbose* sections defines whether or not additional information is printed for a dedicated component.
+
+## devices.xml
+
+The file to define device information is located at src/devices.xml. 
+A device config looks as follows:
+
+``` xml
+<device name="SomeIPServer0x1000" type="server" mac="02:1A:AA:AA:AA:AA" ip="10.0.0.1" sendPort="30491" recPort="30491" />
+```
+
+The following information can be specified:
+ * **Name** of the device
+ * **type** of the device (server, client or attacker)
+ * **mac** Address of the device
+ * **ip** Address of the device
+ * **sendPort** as Port from which messages are sent
+ * **recPort** as Port from which messages are received
+
