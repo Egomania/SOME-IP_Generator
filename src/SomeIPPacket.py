@@ -1,3 +1,5 @@
+""" Module for SOME/IP Packet. Includes classes and functions that manage operating with SOME/IP Packets. """
+
 import logging
 logging.getLogger("scapy").setLevel(1)
 
@@ -40,6 +42,7 @@ VERSION = 0x01
 INTERFACE = 0x01
 
 class SomeIP(Packet):
+    """ Given a Packet, the SOME/IP Header information is parsed and a new Header is added. """
 
     global VERSION
     global INTERFACE
@@ -58,6 +61,7 @@ class SomeIP(Packet):
 
 
 def createPayload():
+    """ Creat arbitrary payload ranging from 0 to 20 Byte. """
     alpha = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F")
     length = random.randint(0,20)
     payload = ''.join([random.choice(alpha) for _ in range(length)])
@@ -65,6 +69,14 @@ def createPayload():
 
 
 def createSomeIP(SenderConfig, ReceiverConfig, MsgConfig):
+    """ 
+    Create a SomeIP packet based on IP/UDP 
+    
+    :param SenderConfig: Needed for MAC, IP and Port information of the sender.    
+    :param ReceiverConfig: Needed for MAC, IP and Port information of the receiver.    
+    :param MsgConfig: Content of the SOME/IP Packet incl. Header and payload.
+    :returns: a SOME/IP Packet over IP/UDP    
+    """    
 
     srcMAC = SenderConfig['mac']
     dstMAC = ReceiverConfig['mac']

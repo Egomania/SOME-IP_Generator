@@ -27,6 +27,7 @@ import Attacker
 def writer(q, serverCount, attackerList, attackerQueue, ServerDeviceConfig, ClientDeviceConfig, interface, pcap):
     """ 
     Used for a seperate writer process that is getting all packets to be send and append them to the .pcap file configured.
+
     :param q: Own Queue to receive all packets forwarded by the attackers.
     :param serverCount: number of servers in the system. 
     :param attackerList: List of attackers in the system.
