@@ -1,3 +1,7 @@
+"""
+Client module that sends reuqests and notifications to servers.
+"""
+
 import multiprocessing
 import Configuration
 import random
@@ -8,6 +12,20 @@ import SomeIPPacket
 
 # everything a Client needs is packed bundled into Client-Class
 class Client(object):
+
+    """
+    Initialization of the client class.
+
+    :param config: Own client configuration.
+    :param q: Own queue for receiving messages from servers.
+    :param writer: Queue for writing out a packet.
+    :param serverQueues: Queues of all available servers.
+    :param stopQueues: A DONE is sent to this queue if on q a DONE is received.
+    :param counter: Number of times all configured sending methods are used.
+    :param attackers: Attacker Queue as the attacker is implemented as MitM.
+    :param verbose: If set to True, more output is printed, default=False
+
+    """
     def __init__(self, config, q, writer, serverQueues, stopQueue, counter, attackers, verbose=False):
         # own Configuration of the client 
         self.config = config 
@@ -28,14 +46,16 @@ class Client(object):
         self.verbose = verbose
 
     def setName(self, name):
+        """ Setter for client name. """
         self.name = name
     
     def setClientID(self, clientID):
+        """ Setter for client IDs. """
         self.clientID = clientID
 
 
 def getCurrentSessionID(key, sharedDict, sessionIDInit):
-    
+    """ returns the session ID for a specific server, method, service pair, initializes the session id if not available in the state, yet """
     if key not in sharedDict:
         idsUsed = []
         idsUsed.append(sessionIDInit)
@@ -67,6 +87,7 @@ def setNewTimestamp(timestamp, serviceID, methodID, c):
     return ts
 
 def deleteUsedSessionID(sharedDict, server, service, method, session, c):
+    """ Deletes the state and the session id, in case a response was received. """
     if c.verbose:
         print (c.name, ' - Delete free Session ID: ',session, ' from: ', sharedDict)
     indexToRemove = sharedDict[(server, service, method)].index(session)
@@ -83,6 +104,7 @@ def sendMsg(c, msg):
     
 
 def checkForResponse(server, service, method, session, state, message, ts, c):
+    """ checks whether or not the incomming message is of type RESPONSE, in case an ERROR was received the message is resend """
     name = multiprocessing.current_process().name
     entry = (server, service, method, session)
     if (entry in state) and (message['type'] == SomeIPPacket.messageTypes['RESPONSE']):
@@ -130,7 +152,7 @@ def setTimestamp(timestamps, serviceIdUsed, methodIdUsed, method):
     return newts
 
 def waitForIncomming(c, sharedDict, state, lock):
-
+    """ own thread waiting for incomming messages (responses or errors) while the main thread is sending more packets """
     name = multiprocessing.current_process().name
 
     stillWait = True
@@ -183,7 +205,7 @@ def waitForIncomming(c, sharedDict, state, lock):
 
 # own config, own queue, writer queue to send all messages, server queues for communication, stop queue when finished, counter as packet number to generate
 def client(c):
-    """worker function"""
+    """worker function, that initializes the client and sends the configured number of packets, for each sent REQUEST state generated"""
 
     lock = multiprocessing.Lock()
     manager = multiprocessing.Manager()
