@@ -1,8 +1,14 @@
-import xml.etree.ElementTree as ET
+"""
+Bundle of methods to read the configuration Files.
+"""
 
+import xml.etree.ElementTree as ET
 import SomeIPPacket
 
 def getDeviceConfig(name, deviceFile, verbose):
+    """
+    Extracts the device information from the configuration file, this includes MAC, IP and Ports for all devices (server and client)
+    """
     tree = ET.parse(deviceFile)
     root = tree.getroot()
 
@@ -27,7 +33,9 @@ def str2bool(s):
         return False
 
 def getClientConfig(name, serviceFile, deviceFile, verbose):
-
+    """
+    Extracts the meta information from the configuration file for clients, this includes clientID, services and methods allowed to request, servers providing those services and methods, information about time sentitiveness of notifications and resend intervals
+    """
     tree = ET.parse(serviceFile)
     root = tree.getroot()
 
@@ -102,7 +110,9 @@ def getClientConfig(name, serviceFile, deviceFile, verbose):
     return config
 
 def getServerConfig(name, serviceFile, verbose):
-
+    """
+    Extracts the meta information from the configuration file for servers, this includes provided services and methods, error rates and response intervals
+    """
     tree = ET.parse(serviceFile)
     root = tree.getroot()
 

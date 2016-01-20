@@ -8,6 +8,8 @@ Contents:
 
    generator
    server
+   client
    attacker
    msg
    some
+   config
