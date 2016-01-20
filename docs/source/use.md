@@ -109,3 +109,10 @@ The *client* information compasses of
  * **min** defines the minimum interleave between resending a packet after an error
  * **max** defines the maximum interleave between resending a packet after an error
 
+The last part is defining the servers offering the services.
+The *server* information compasses of
+ * **id** that has to be the same as in devices.xml
+ * **errorRate** probability that the request is not answered with a response
+ * **min** defines the minimum response time 
+ * **max** defines the maximum response time 
+
