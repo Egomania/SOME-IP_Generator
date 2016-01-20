@@ -1,3 +1,5 @@
+""" Server class that simualtes a server behaving as defined in the AUTOSAT standard. Each server instance is executed as a single process. """
+
 import multiprocessing
 import random
 
@@ -7,6 +9,17 @@ import Msg
 import time
 
 class Server(object):
+    """
+    Initialization of the server object.
+
+    :param config: Own server configuration.
+    :param q: Own queue for receiving messages from clients.
+    :param writer: Queue for writing out a packet.
+    :param clientQueues: Queues of all available clients.
+    :param attackers: Attacker Queue as the attacker is implemented as MitM.
+    :param stopQueues: A DONE is sent to this queue if on q a DONE is received.
+    :param verbose: If set to True, more output is printed, default=False
+    """
     def __init__(self, config, q, writer, clientQueues, attackers, stopQueue, verbose=False):
         # own Configuration of the server 
         self.config = config 
@@ -22,10 +35,12 @@ class Server(object):
         self.stopQueue = stopQueue
 
     def setName(self, name):
+        """ Setter for the own server name. """
         self.name = name
 
 
 def msgTypeSupported(msgType):
+    """ Checks whether or not the requested message type is supported. """
     for elem in SomeIPPacket.messageTypes:
         if SomeIPPacket.messageTypes[elem] == msgType:
             return True
@@ -40,7 +55,7 @@ def returnRequestedMethod(service, methodID):
     return None
 
 def checkServiceAndMethodKnown(service, serviceID, methodID):
-
+    """ Checks whether or not the requested service and method are provided by this instance. """
     if serviceID not in service:      
         return False
     else:
@@ -50,6 +65,7 @@ def checkServiceAndMethodKnown(service, serviceID, methodID):
     return True
 
 def requestedMethodIsRequest(service, serviceID, methodID):
+    """ Checks whether or not the requested service and method is of type REQUEST. """
     if checkServiceAndMethodKnown(service, serviceID, methodID):
         curMethod = returnRequestedMethod(service[serviceID], methodID)
         if curMethod['type'] == SomeIPPacket.messageTypes['REQUEST']:
@@ -65,7 +81,7 @@ def getProbValue(errorRate):
         return 0
 
 def generateRandomReply(errorRate, verbose, name):
-
+    """ Generates a random reply, with a certain defined probability, otherwise an error is sent back. """
     reply = {}
 
     value = getProbValue(errorRate)
@@ -101,6 +117,16 @@ def generateRandomReply(errorRate, verbose, name):
     return reply
 
 def sendReply (msgType, msgRet, client, reply, timestamp, s):
+    """
+    Putting everything together and send the reply/error.
+    
+    :param msgType: The used message type for the reply.
+    :param msgRet: The used return/error code for the reply.
+    :param client: The client the message is sent to.
+    :param reply: The content of the reply.
+    :param timestamp: The timestamp that shall be used.
+    :param s: Own server instance.
+    """
     reply['type'] = msgType
     reply['ret'] = msgRet
     returnMsg = Msg.Msg(s.name, client, reply, timestamp)
@@ -117,7 +143,7 @@ def setTimeStamp(timestampOriginal, minVal, maxVal, s):
     return timestamp
 
 def server(s):
-    """service function"""
+    """Main service function that initializes the server object, waits for incomming clients requests and responds to them."""
     name = multiprocessing.current_process().name
     s.setName(name)
     services = s.config

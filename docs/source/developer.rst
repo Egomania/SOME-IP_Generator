@@ -1,4 +1,4 @@
-Developer Documentation
+Code Documentation
 =============================================
 
 Contents:
@@ -7,6 +7,7 @@ Contents:
    :maxdepth: 2
 
    generator
+   server
    attacker
    msg
    some
