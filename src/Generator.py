@@ -1,3 +1,9 @@
+""" 
+Main Module of the project. 
+The configuration from config/config.ini is parsed.
+All needed devices (client, server, attacker) are initialized and started as seperate processes.
+"""
+
 import multiprocessing
 import time
 import xml.etree.ElementTree as ET
@@ -19,6 +25,17 @@ import Attacker
 
 # Expects: own Queue, Number of incomming 'Done's, ServerDeviceConfiguration, ClientDeviceConfiguration
 def writer(q, serverCount, attackerList, attackerQueue, ServerDeviceConfig, ClientDeviceConfig, interface, pcap):
+    """ 
+    Used for a seperate writer process that is getting all packets to be send and append them to the .pcap file configured.
+    :param q: Own Queue to receive all packets forwarded by the attackers.
+    :param serverCount: number of servers in the system. 
+    :param attackerList: List of attackers in the system.
+    :param attackerQueue: Message Queues of the attackers.
+    :param ServerDeviceConfig: Server Device Configuration with needed meta data for sending packets.
+    :param ClientDeviceConfig: Client Device Configuration (includes attacker device) with needed meta data for sending packets.
+    :param interface: Interface to send the data.
+    :param pcap: .pcap file to write the data.
+    """
 
     deviceConfig = {}
 
@@ -39,7 +56,7 @@ def writer(q, serverCount, attackerList, attackerQueue, ServerDeviceConfig, Clie
     while (True):
         msg = q.get()
         
-        # servers sending 'Done's in case all requests are processed
+        # attacker sending 'Done's in case all requests are processed
         if msg == 'Done':
             break
         else:
@@ -77,6 +94,16 @@ def writer(q, serverCount, attackerList, attackerQueue, ServerDeviceConfig, Clie
     print ('Writer Exiting')    
 
 def stop(q, clientCounts, servers, serverQueues):
+    """ 
+    First Level of stopping all processes. 
+    This function is running as a process and waits for all clients to be done (all required messages are sent and no state).
+    In this case, a DONE message is sent to all servers to indicate that no more clients requests will arrive and they can shut down. 
+
+    :param q: Own Queue to listen on incomming DONE messages.
+    :param clientCounts: Number of expected DONE messages.
+    :param servers: List of server instances.
+    :param serverQueues: List of server queues.
+    """
 
     counter = 0
 
@@ -92,7 +119,16 @@ def stop(q, clientCounts, servers, serverQueues):
     print ("Stop", 'Exiting')
 
 def stop2(q, serverCounts, attackers, attackerQueue):
+    """ 
+    Second Level of stopping all processes. 
+    This function is running as a process and waits for all servers to be done (server got a DONE message previously).
+    In this case, a DONE message is sent to all attackers to indicate that no more packets will arrive and they can shut down. 
 
+    :param q: Own Queue to listen on incomming DONE messages.
+    :param serverCounts: Number of expected DONE messages.
+    :param attackers: List of attacker instances.
+    :param attackerQueue: List of attacker queues.
+    """
     counter = 0
 
     while (True):
