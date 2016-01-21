@@ -75,6 +75,9 @@ The following information can be specified:
 
 Client have an additional attribute *clientID*.
 
+Note that the system needs at least one attacker as this component acts as a MitM and forwards messages to the original entities.
+If an attack-free dump is needed configure an attck count of 0 ind the config.ini file.
+
 ## services.xml
 
 The file to define service information is located at src/services.xml.
