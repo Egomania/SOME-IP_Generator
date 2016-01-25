@@ -14,6 +14,7 @@ Contents:
    install
    use
    developer
+   code
 
 Indices and tables
 ==================

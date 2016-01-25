@@ -1,15 +1,7 @@
-Code Documentation
+Developer Documentation
 =============================================
 
-Contents:
+To implement new attacks, add a new file ito the src/attacks folder.
+Define a doAttack function with appropriate parameters and return values.
 
-.. toctree::
-   :maxdepth: 2
-
-   generator
-   server
-   client
-   attacker
-   msg
-   some
-   config
+Configure the new attack in the config.ini file.
