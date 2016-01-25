@@ -10,7 +10,7 @@ Note that the trace is out out-of-order, you can use e.g. reordercap to cope wit
 
 The main configuration file is located in src/config.ini.
 
-``` ini
+~~~ini
 [Files]
 deviceFile=config/devices.xml
 serviceFile=config/services.xml
@@ -30,7 +30,7 @@ attacks=fakeClientID, wrongInterface, disturbTiming, fakeResponse, sendErrorOnEr
 client=false
 server=false
 attacker=false
-```
+~~~
 
 The *Files* section lists the additionally needed meta data file.
  * **deviceFile** contains information like name, type, mac, ip, sender port and receiving port
@@ -54,9 +54,9 @@ The *Verbose* sections defines whether or not additional information is printed 
 The file to define device information is located at src/devices.xml. 
 A device config looks as follows:
 
-``` xml
+~~~xml
 <device name="SomeIPServer0x1000" type="server" mac="02:1A:AA:AA:AA:AA" ip="10.0.0.1" sendPort="30491" recPort="30491" />
-```
+~~~
 
 The following information can be specified:
  * **Name** of the device
@@ -76,7 +76,7 @@ If an attack-free dump is needed configure an attck count of 0 ind the config.in
 The file to define service information is located at src/services.xml.
 A service entry look as follows:
 
-``` xml
+~~~xml
 <service id="0x1000">
 	<!-- Methods -->
 	<method id="0x0111" type="REQUEST" >
@@ -88,7 +88,7 @@ A service entry look as follows:
 		<server id="SomeIPServer0x1000" errorRate="0.1" min="1" max="5"/>
 	</servers>	
 </service>
-```
+~~~
 
 First, the *id* of the service is defined.
 Note that this id corresponds to the id appaering in the SOME/IP Packet.

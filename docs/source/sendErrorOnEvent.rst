@@ -7,6 +7,6 @@
    ^^^^^^^^^
    .. autofunction:: doAttack
 
-  sendErrorOnEvent
-  ^^^^^^^^^^^^^^^^^^
+   sendErrorOnEvent
+   ^^^^^^^^^^^^^^^^^^
    .. autofunction:: sendErrorOnEvent
