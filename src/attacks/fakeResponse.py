@@ -1,4 +1,4 @@
-
+""" Removes a valid response from a server and replaces this response with an Error message. """
 import copy
 import random
 
@@ -7,7 +7,7 @@ from src import SomeIPPacket
 from src.attacks import AttackerHelper
 
 def fakeResponse(a, msgOrig):
-    """ Removes a valid response from a server and replaces this response with an Error message. """
+    """ Attack Specific Function. """
     sender = msgOrig.receiver
     receiver = msgOrig.sender
     timestamp = None
@@ -32,7 +32,7 @@ def fakeResponse(a, msgOrig):
 
 
 def doAttack(curAttack, msgOrig, a, attacksSuc):
-
+    """ Generic Function called from Attacker module. """
     RetVal = {}
 
     if a.verbose:

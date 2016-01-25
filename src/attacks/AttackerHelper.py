@@ -1,3 +1,7 @@
+"""
+Collection of helper functions to implement attacks.
+"""
+
 import random 
 
 from src import SomeIPPacket

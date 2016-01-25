@@ -141,6 +141,9 @@ def forward (a, msg):
         print ('Unkown Receiver.')
 
 def loadAttacks(attacksToUse):
+    """ 
+    Dynamically loads modules from attacks folder to perform configured attacks.
+    """
 
     modules = []
 

@@ -1,41 +1,39 @@
 <?xml version="1.0"?>
 <devices>
-	<protocol name="SomeIP">
 <!-- Servers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-		<device name="SomeIPServer0x1000" type="server" mac="02:1A:AA:AA:AA:AA" ip="10.0.0.1" sendPort="30491" recPort="30491" />
+	<device name="SomeIPServer0x1000" type="server" mac="02:1A:AA:AA:AA:AA" ip="10.0.0.1" sendPort="30491" recPort="30491" />
 
-		<device name="SomeIPServer0x3000" type="server" mac="02:2A:AA:AA:AA:AA" ip="10.0.0.2" sendPort="30491" recPort="30491" />
+	<device name="SomeIPServer0x3000" type="server" mac="02:2A:AA:AA:AA:AA" ip="10.0.0.2" sendPort="30491" recPort="30491" />
 
-		<device name="SomeIPServer0x3010" type="server" mac="02:3A:AA:AA:AA:AA" ip="10.0.0.3" sendPort="30491" recPort="30491" />
+	<device name="SomeIPServer0x3010" type="server" mac="02:3A:AA:AA:AA:AA" ip="10.0.0.3" sendPort="30491" recPort="30491" />
 
-		<device name="SomeIPServer0x3020" type="server" mac="02:4A:AA:AA:AA:AA" ip="10.0.0.4" sendPort="30491" recPort="30491" />
+	<device name="SomeIPServer0x3020" type="server" mac="02:4A:AA:AA:AA:AA" ip="10.0.0.4" sendPort="30491" recPort="30491" />
 
-		<device name="SomeIPServer0x5000" type="server" mac="02:5A:AA:AA:AA:AA" ip="10.0.0.5" sendPort="30491" recPort="30491" />
+	<device name="SomeIPServer0x5000" type="server" mac="02:5A:AA:AA:AA:AA" ip="10.0.0.5" sendPort="30491" recPort="30491" />
 
-		<device name="SomeIPServer0x6000" type="server" mac="02:6A:AA:AA:AA:AA" ip="10.0.0.6" sendPort="30491" recPort="30491" />
+	<device name="SomeIPServer0x6000" type="server" mac="02:6A:AA:AA:AA:AA" ip="10.0.0.6" sendPort="30491" recPort="30491" />
 
-		<device name="SomeIPServer0xC000" type="server" mac="02:7A:AA:AA:AA:AA" ip="10.0.0.7" sendPort="30491" recPort="30491" />
+	<device name="SomeIPServer0xC000" type="server" mac="02:7A:AA:AA:AA:AA" ip="10.0.0.7" sendPort="30491" recPort="30491" />
 
-		<device name="SomeIPServer0xC010" type="server" mac="02:8A:AA:AA:AA:AA" ip="10.0.0.8" sendPort="30491" recPort="30491" />
+	<device name="SomeIPServer0xC010" type="server" mac="02:8A:AA:AA:AA:AA" ip="10.0.0.8" sendPort="30491" recPort="30491" />
 
 <!-- Clients ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-		<device name="SomeIPClient0x1000" type="client" clientID="1" mac="02:1B:BB:BB:BB:BB" ip="10.1.0.1" sendPort="30501" recPort="30501" />
+	<device name="SomeIPClient0x1000" type="client" clientID="1" mac="02:1B:BB:BB:BB:BB" ip="10.1.0.1" sendPort="30501" recPort="30501" />
 
-		<device name="SomeIPClient0x3000" type="client" clientID="2" mac="02:2B:BB:BB:BB:BB" ip="10.1.0.2" sendPort="30501" recPort="30501" />
+	<device name="SomeIPClient0x3000" type="client" clientID="2" mac="02:2B:BB:BB:BB:BB" ip="10.1.0.2" sendPort="30501" recPort="30501" />
 
-		<device name="SomeIPClient0x3010" type="client" clientID="3" mac="02:3B:BB:BB:BB:BB" ip="10.1.0.3" sendPort="30501" recPort="30501" />
+	<device name="SomeIPClient0x3010" type="client" clientID="3" mac="02:3B:BB:BB:BB:BB" ip="10.1.0.3" sendPort="30501" recPort="30501" />
 
-		<device name="SomeIPClient0x3020" type="client" clientID="4" mac="02:4B:BB:BB:BB:BB" ip="10.1.0.4" sendPort="30501" recPort="30501" />
+	<device name="SomeIPClient0x3020" type="client" clientID="4" mac="02:4B:BB:BB:BB:BB" ip="10.1.0.4" sendPort="30501" recPort="30501" />
 
-		<device name="SomeIPClient0x5000" type="client" clientID="5" mac="02:5B:BB:BB:BB:BB" ip="10.1.0.5" sendPort="30501" recPort="30501" />
+	<device name="SomeIPClient0x5000" type="client" clientID="5" mac="02:5B:BB:BB:BB:BB" ip="10.1.0.5" sendPort="30501" recPort="30501" />
 
-		<device name="SomeIPClient0x6000" type="client" clientID="6" mac="02:6B:BB:BB:BB:BB" ip="10.1.0.6" sendPort="30501" recPort="30501" /> 
+	<device name="SomeIPClient0x6000" type="client" clientID="6" mac="02:6B:BB:BB:BB:BB" ip="10.1.0.6" sendPort="30501" recPort="30501" /> 
 
-		<device name="SomeIPClient0xC000" type="client" clientID="7" mac="02:7B:BB:BB:BB:BB" ip="10.1.0.7" sendPort="30501" recPort="30501" />
+	<device name="SomeIPClient0xC000" type="client" clientID="7" mac="02:7B:BB:BB:BB:BB" ip="10.1.0.7" sendPort="30501" recPort="30501" />
 
-		<device name="SomeIPClient0xC010" type="client" clientID="8" mac="02:8B:BB:BB:BB:BB" ip="10.1.0.8" sendPort="30501" recPort="30501" />
+	<device name="SomeIPClient0xC010" type="client" clientID="8" mac="02:8B:BB:BB:BB:BB" ip="10.1.0.8" sendPort="30501" recPort="30501" />
 
-		<device name="Attacker" type="attacker" clientID="13" mac="02:9B:BB:BB:BB:BB" ip="10.1.0.9" sendPort="30501" recPort="30501" />
+	<device name="Attacker" type="attacker" clientID="13" mac="02:9B:BB:BB:BB:BB" ip="10.1.0.9" sendPort="30501" recPort="30501" />
 
-	</protocol>
 </devices>

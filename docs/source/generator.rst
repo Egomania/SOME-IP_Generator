@@ -7,6 +7,10 @@
    Functions
    ---------------
 
+   start
+   ^^^^^^^^
+   .. autofunction:: start
+
    writer
    ^^^^^^^^
    .. autofunction:: writer

@@ -30,6 +30,20 @@
    ^^^^^^^^
    .. autofunction:: doAttack
 
+   loadAttacks
+   ^^^^^^^^^^^^
+   .. autofunction:: loadAttacks
+
+   randomErrorCode
+   ^^^^^^^^^^^^^^^
+   .. autofunction:: randomErrorCode
+
+
+``AttackerHelper.py`` -- Helper Functions for Attack Execution
+================================================================
+
+.. automodule:: attacks.AttackerHelper
+
    selectVictim
    ^^^^^^^^^^^^
    .. autofunction:: selectVictim
@@ -42,28 +56,79 @@
    ^^^^^^^^^
    .. autofunction:: createMsg
 
-   Attack Functions
-   ----------------
+``sendErrorOnError.py`` 
+================================================================
+
+.. automodule:: attacks.sendErrorOnError
+
+   doAttack
+   ^^^^^^^^
+   .. autofunction:: doAttack
 
    sendErrorOnError
    ^^^^^^^^^^^^^^^^
    .. autofunction:: sendErrorOnError
 
+``sendErrorOnEvent.py`` 
+================================================================
+
+.. automodule:: attacks.sendErrorOnEvent
+
+   doAttack
+   ^^^^^^^^^
+   .. autofunction:: doAttack
+
+  sendErrorOnEvent
+  ^^^^^^^^^^^^^^^^^^
+   .. autofunction:: sendErrorOnEvent
+
+``fakeResponse.py`` 
+================================================================
+
+.. automodule:: attacks.fakeResponse
+
+   doAttack
+   ^^^^^^^^
+   .. autofunction:: doAttack
+
    fakeResponse
    ^^^^^^^^^^^^
    .. autofunction:: fakeResponse
 
-   randomErrorCode
-   ^^^^^^^^^^^^^^^
-   .. autofunction:: randomErrorCode
+``disturbTiming.py`` 
+================================================================
+
+.. automodule:: attacks.disturbTiming
+
+   doAttack
+   ^^^^^^^^
+   .. autofunction:: doAttack
 
    disturbTiming
    ^^^^^^^^^^^^^
    .. autofunction:: disturbTiming
 
+``wrongInterface.py`` 
+================================================================
+
+.. automodule:: attacks.wrongInterface
+
+   doAttack
+   ^^^^^^^^
+   .. autofunction:: doAttack
+
    wrongInterface
    ^^^^^^^^^^^^^^
    .. autofunction:: wrongInterface
+
+``fakeClientID.py`` 
+================================================================
+
+.. automodule:: attacks.fakeClientID
+
+   doAttack
+   ^^^^^^^^
+   .. autofunction:: doAttack
 
    fakeClientID
    ^^^^^^^^^^^^

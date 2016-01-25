@@ -2,7 +2,7 @@
 
 ## Basics
 
-python src/Generator.py
+python start.py
 
 Note that the trace is out out-of-order, you can use e.g. reordercap to cope with this.
 
@@ -24,14 +24,7 @@ counter=50
 counter=10
 min=1
 max=3
-fakeClientID=true
-wrongInterface=true
-disturbTiming=true
-fakeResponse=true
-sendErrorOnError=true
-sendErrorOnEvent=true
-deleteRequest=true
-deleteResponse=true
+attacks=fakeClientID, wrongInterface, disturbTiming, fakeResponse, sendErrorOnError, sendErrorOnEvent, deleteRequest, deleteResponse
 
 [Verbose]
 client=false
@@ -52,7 +45,7 @@ The *Attacks* section defines all needed information for the attacker configurat
  * **counter** defines the rate an attack will be performed, if this is set to zero non attack will be performed.
  * **min** defines the minimum response time of the attacker in ms
  * **max** defines the maximum response time of the attacker in ms
- * The other options define whether or not a specififc attack is included
+ * **attacks** defines which attacks can be used, note that every module located in src/attacks/ is possible
 
 The *Verbose* sections defines whether or not additional information is printed for a dedicated component.
 

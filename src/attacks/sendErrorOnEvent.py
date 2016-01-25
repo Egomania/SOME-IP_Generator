@@ -1,3 +1,4 @@
+""" Answers with an Error message to a previous Error message. """
 
 import copy
 import random
@@ -6,8 +7,8 @@ from src import Msg
 from src import SomeIPPacket
 from src.attacks import AttackerHelper
 
-def sendErrorOnError(a, msgOrig):
-    """ Answers with an Error message to a previous Error message. """
+def sendErrorOnEvent(a, msgOrig):
+    """ Attack Specific Function. """
     sender = msgOrig.receiver
     receiver = msgOrig.sender
     timestamp = None
@@ -32,14 +33,14 @@ def sendErrorOnError(a, msgOrig):
 
 
 def doAttack(curAttack, msgOrig, a, attacksSuc):
-
+    """ Generic Function called from Attacker module. """
     RetVal = {}
 
     if a.verbose:
         print ('Send Error On Event Attack')
 
     if (msgOrig.message['type'] == SomeIPPacket.messageTypes['NOTIFICATION']) or (msgOrig.message['type'] == SomeIPPacket.messageTypes['REQUEST_NO_RETURN']):
-        msg = sendErrorOnError(a, msgOrig)
+        msg = sendErrorOnEvent(a, msgOrig)
         if a.verbose:
             print ('MALICIOUS MSG: ', msg.message, ' FROM=', msg.sender, ' TO=', msg.receiver)
         RetVal['msg'] = msg

@@ -150,6 +150,11 @@ def str2bool(s):
         return False
 
 def start():
+    """
+    Starts the Generator.
+    Reads needed Configurations and initializes Clients, Servers and Attackers.
+    Starts Client, Server and Attackers as seperate processes.
+    """
 
     Config = configparser.ConfigParser()
     Config.read("config/config.ini")
