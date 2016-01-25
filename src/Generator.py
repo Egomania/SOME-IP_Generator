@@ -16,15 +16,15 @@ logging.getLogger("scapy").setLevel(1)
 
 from scapy.all import *
 
-import SomeIPPacket
-import Client
-import Server
-import Configuration
-import Msg
-import Attacker
+from src import SomeIPPacket
+from src import Client
+from src import Server
+from src import Configuration
+from src import Msg
+from src import Attacker
 
 # Expects: own Queue, Number of incomming 'Done's, ServerDeviceConfiguration, ClientDeviceConfiguration
-def writer(q, serverCount, attackerList, attackerQueue, ServerDeviceConfig, ClientDeviceConfig, interface, pcap):
+def writerWorker(q, serverCount, attackerList, attackerQueue, ServerDeviceConfig, ClientDeviceConfig, interface, pcap):
     """ 
     Used for a seperate writer process that is getting all packets to be send and append them to the .pcap file configured.
 
@@ -149,7 +149,7 @@ def str2bool(s):
     else:
         return False
 
-if __name__ == '__main__':
+def start():
 
     Config = configparser.ConfigParser()
     Config.read("config/config.ini")
@@ -246,7 +246,7 @@ if __name__ == '__main__':
 
     # prepare Writer that is generating the SOMEIP Packets
     writerQueue = multiprocessing.Queue()
-    writer = multiprocessing.Process(target=writer, args=(writerQueue, len(serverList), attackerList, attackerQueue, serverDeviceConfigs, clientDeviceConfigs, interface, pcap))
+    writer = multiprocessing.Process(target=writerWorker, args=(writerQueue, len(serverList), attackerList, attackerQueue, serverDeviceConfigs, clientDeviceConfigs, interface, pcap))
     writer.start()
 
     # prepare Stop Worker to shutdown all services

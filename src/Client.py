@@ -3,12 +3,12 @@ Client module that sends reuqests and notifications to servers.
 """
 
 import multiprocessing
-import Configuration
 import random
-import Msg  
-import time     
+import time 
 
-import SomeIPPacket
+from src import Configuration
+from src import Msg      
+from src import SomeIPPacket
 
 # everything a Client needs is packed bundled into Client-Class
 class Client(object):

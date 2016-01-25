@@ -3,7 +3,8 @@ Bundle of methods to read the configuration Files.
 """
 
 import xml.etree.ElementTree as ET
-import SomeIPPacket
+
+from src import SomeIPPacket
 
 def getDeviceConfig(name, deviceFile, verbose):
     """

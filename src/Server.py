@@ -2,11 +2,11 @@
 
 import multiprocessing
 import random
-
-import Configuration
-import SomeIPPacket
-import Msg
 import time
+
+from src import Configuration
+from src import SomeIPPacket
+from src import Msg
 
 class Server(object):
     """
