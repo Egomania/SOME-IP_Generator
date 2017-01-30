@@ -41,7 +41,6 @@ def getClientConfig(name, serviceFile, deviceFile, verbose):
     root = tree.getroot()
 
     config = {}
-
     config['clientID'] = int(getOwnID(name, deviceFile))
 
     services = []

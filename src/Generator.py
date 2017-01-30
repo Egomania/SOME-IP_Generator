@@ -173,7 +173,7 @@ def start():
     serverVerbose = str2bool(Config["Verbose"].get('server', False))
     attackerVerbose = str2bool(Config["Verbose"].get('attacker', False))
 
-    tree = ET.parse('config/devices.xml')
+    tree = ET.parse(deviceFile)
     root = tree.getroot()
 
     clientList = []

@@ -122,6 +122,7 @@ def sendMsg(a, msg, msgOrig):
     """ The Message Object is sent to the writer queue putting the Packet into the trace. """
     msg.timestamp = setTimestamp(msgOrig.timestamp, a.intervalMin, a.intervalMax)
     a.writerQueue.put(msg)
+    print (msg.receiver)
     if msg.receiver in a.serverQueues:
         a.serverQueues[msg.receiver].put(msg)
     elif msg.receiver in a.clientQueues:
@@ -131,6 +132,7 @@ def sendMsg(a, msg, msgOrig):
 
 def forward (a, msg):
     """ The message is going to be forwarded to its original receiver. """
+    print (msg.receiver)
     if msg.receiver in a.clientQueues:
         a.clientQueues[msg.receiver].put(msg)
     elif msg.receiver in a.serverQueues:
